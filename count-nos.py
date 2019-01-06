@@ -8,6 +8,10 @@ capture = cv2.VideoCapture(0)
 
 while capture.isOpened():
 
+    capture.set(3, 800)
+    capture.set(4, 600)
+
+
     # Capture frames from the camera
     ret, frame = capture.read()
 
@@ -36,7 +40,7 @@ while capture.isOpened():
     ret, thresh = cv2.threshold(filtered, 127, 255, 0)
 
     # Show threshold image
-    cv2.imshow("Thresholded", thresh)
+    # cv2.imshow("Thresholded", thresh)
 
     # Find contours
     image, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -100,7 +104,7 @@ while capture.isOpened():
         pass
 
     # Show required images
-    cv2.imshow("Gesture", frame)
+    # cv2.imshow("Gesture", frame)
     all_image = np.hstack((drawing, crop_image))
     cv2.imshow('Contours', all_image)
 
