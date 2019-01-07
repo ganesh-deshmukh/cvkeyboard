@@ -8,12 +8,19 @@ while True:
     # *************************IP webcam image stream ************************************
     URL = "http://192.168.43.1:8080/shot.jpg"
     urllib.request.urlretrieve(URL, "shot1.jpg")
+
     frame = cv2.imread("shot1.jpg")
 
     # resize the frame, blur it, and convert it to the HSV
     frame = imutils.resize(frame, width=640, height=480)
+    blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+    hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    # h, w, channels = np.shape(frame)
+    # print image properties.
+    # print("width: " + str(w))
+    # print("height: " + str(h))
+    # print("channels: " + str(channels))
 
     # define range of blue color in HSV
     lower = np.array([110, 50, 50])
@@ -25,8 +32,27 @@ while True:
     # Threshold the HSV image to get only blue colors
     mask = cv2.inRange(hsv, lower, upper)
 
-    # Bitwise-AND mask and original image
-    res = cv2.bitwise_and(frame, frame, mask=mask)
+    # Bitwise-AND mask and original image  			# To show filtered images.
+    # res = cv2.bitwise_and(frame, frame, mask=mask)
+
+    # find contours and draw border and calculate points
+
+    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+    center = None
+
+    # only proceed if at least one contour was found
+    if len(cnts) > 0:
+        # find the largest contour in the mask, then use
+        # it to compute the minimum enclosing circle and
+        # centroid
+        c = max(cnts, key=cv2.contourArea)
+        ((x, y), radius) = cv2.minEnclosingCircle(c)
+        cv2.drawContours(frame, c, -1, (255, 0, 0), 2)        
+        cv2.circle(frame, (int(x),int(y)), int(radius), (0, 255, 255), 2)
+        
+        print("x =" +str(x))
+        print("y =" +str(y))
+        print("radius =" +str(radius))
 
     # arguments for writting on video-frame
     font = cv2.FONT_HERSHEY_SIMPLEX
@@ -35,22 +61,16 @@ while True:
     fontColor = (255, 0, 255)
     lineType = 2
     text = "CV-KeyBoard"
-
     cv2.putText(
         frame, text, bottomLeftCornerOfText, font, fontScale, fontColor, lineType
     )
 
-    # x, y, w, h = cv2.getWindowImageRect("Frame")
-
     cv2.imshow("Frame", frame)
-
     cv2.imshow("mask", mask)
+    # cv2.imshow("res", res)
 
-    # cv2.imshow('Window-name',frame)
-
+    # **************** boilerplate-code => same for all ************************#
     if cv2.waitKey(1) == 27:
         break
-
 cap.release()
-
 cv2.destroyAllWindows()
