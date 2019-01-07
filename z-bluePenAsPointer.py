@@ -47,9 +47,17 @@ while True:
         # centroid
         c = max(cnts, key=cv2.contourArea)
         ((x, y), radius) = cv2.minEnclosingCircle(c)
-        cv2.drawContours(frame, c, -1, (255, 0, 0), 2)        
-        cv2.circle(frame, (int(x),int(y)), int(radius), (0, 255, 255), 2)
+        # cv2.drawContours(frame, c, -1, (255, 0, 0), 2)        
+        # cv2.circle(frame, (int(x),int(y)), int(radius), (0, 255, 255), 2)
+        cv2.circle(frame,(int(x),int(y)),3,(255,255,0),3)               # this is center
         
+        #*************** crop that image **************
+
+    # crop_img = img[y:y+h, x:x+w]
+    # cv2.imshow("cropped", crop_img)
+        pt1 = (int(x - 25),int(y - radius -40))
+        pt2 = (int(x + 25),int(y - radius -00))
+        cv2.rectangle(frame, pt1, pt2 , (255,255,0),3)
         print("x =" +str(x))
         print("y =" +str(y))
         print("radius =" +str(radius))
