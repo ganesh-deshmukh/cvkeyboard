@@ -2,6 +2,7 @@
 import imutils
 import cv2
  
+
 # load the image, convert it to grayscale, and blur it slightly
 image = cv2.imread("palm.jpeg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -32,11 +33,13 @@ extBot = tuple(c[c[:, :, 1].argmax()][0])
 # draw the outline of the object, then draw each of the
 # extreme points, where the left-most is red, right-most
 # is green, top-most is blue, and bottom-most is teal
-cv2.drawContours(image, [c], -1, (0, 255, 255), 2)
-cv2.circle(image, extLeft, 8, (0, 0, 255), -1)
-cv2.circle(image, extRight, 8, (0, 255, 0), -1)
+# cv2.drawContours(image, [c], -1, (0, 255, 255), 2)
+# cv2.circle(image, extLeft, 8, (0, 0, 255), -1)
+# cv2.circle(image, extRight, 8, (0, 255, 0), -1)
 cv2.circle(image, extTop, 8, (255, 0, 0), -1)
-cv2.circle(image, extBot, 8, (255, 255, 0), -1)
+# cv2.circle(image, extBot, 8, (255, 255, 0), -1)
+
+# print(extTop)
 
 
 # show the output image

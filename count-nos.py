@@ -104,7 +104,7 @@ while capture.isOpened():
         pass
 
     # Show required images
-    # cv2.imshow("Gesture", frame)
+    cv2.imshow("Gesture", frame)
     all_image = np.hstack((drawing, crop_image))
     cv2.imshow('Contours', all_image)
 

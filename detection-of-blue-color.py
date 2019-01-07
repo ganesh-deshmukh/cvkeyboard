@@ -25,9 +25,26 @@ while(1):
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= mask)
 
-    cv2.imshow('frame',frame)
+    # arguments for writting on video-frame
+    font                   = cv2.FONT_HERSHEY_SIMPLEX
+    bottomLeftCornerOfText = (10,50)
+    fontScale              = 1
+    fontColor              = (255,0,255)
+    lineType               = 2
+    text = "CV-KeyBoard"
+
+    cv2.putText(frame,text, bottomLeftCornerOfText, font, fontScale,fontColor,lineType)
+
+    x, y, w, h = cv2.getWindowImageRect("Frame") 
+    # cv2.putText(frame,("width =" + str(x) + "height =" + str(y)), (200, 300), font, fontScale,(255,0,255),lineType)
+
+    cv2.imshow('Frame',frame)
+
+    x, y, w, h = cv2.getWindowImageRect("Frame") 
+    
     cv2.imshow('mask',mask)
-    # cv2.imshow('res',res)
+
+
     k = cv2.waitKey(5) & 0xFF
     if k == 27:
         break

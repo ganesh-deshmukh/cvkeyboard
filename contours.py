@@ -10,8 +10,6 @@ hull = [ cv2.convexHull(c) for c in contours]
 
 final = cv2.drawContours(hand, hull , -1,(255,0,0))
 
-
-
 cv2.imshow("Hand ", hand)
 cv2.imshow("threshold ", the)
 cv2.imshow("final-img ", final)
