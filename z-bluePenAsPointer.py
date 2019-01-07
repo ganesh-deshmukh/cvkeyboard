@@ -3,6 +3,8 @@ import cv2
 import numpy as np
 import urllib.request  # for reading image from URL
 import imutils
+from PIL import Image
+import pytesseract
 
 while True:
     # *************************IP webcam image stream ************************************
@@ -41,6 +43,7 @@ while True:
     center = None
 
     # only proceed if at least one contour was found
+    
     if len(cnts) > 0:
         # find the largest contour in the mask, then use
         # it to compute the minimum enclosing circle and
@@ -53,16 +56,29 @@ while True:
         
         #*************** crop that image **************
 
-    # crop_img = img[y:y+h, x:x+w]
-    # cv2.imshow("cropped", crop_img)
-        pt1 = (int(x - 25),int(y - radius -40))
-        pt2 = (int(x + 25),int(y - radius -00))
-        cv2.rectangle(frame, pt1, pt2 , (255,255,0),3)
-        print("x =" +str(x))
-        print("y =" +str(y))
-        print("radius =" +str(radius))
+        x1 = int(x - 30)
+        x2 = int(x + 30)
+        y1 = int(y - radius -50)
+        y2 = int(y - radius -00)
 
-    # arguments for writting on video-frame
+        pt1 = (x1,y1)
+        pt2 = (x2,y2)
+        cv2.rectangle(frame, pt1, pt2 , (255,255,0),3)
+        # print("x =" +str(x))
+        # print("y =" +str(y))
+        # print("radius =" +str(radius))
+
+        crop_img = frame[y1:y2, x1:x2]
+        cv2.imshow("cropped", crop_img)
+
+# **************    Tesseract-part  ****************************
+
+        im = Image.fromarray(crop_img)
+        text = pytesseract.image_to_string(im)
+        print("text-output is = " + text)
+        
+
+    # ************** arguments for writting on video-frame *********
     font = cv2.FONT_HERSHEY_SIMPLEX
     bottomLeftCornerOfText = (10, 50)
     fontScale = 1
@@ -72,9 +88,8 @@ while True:
     cv2.putText(
         frame, text, bottomLeftCornerOfText, font, fontScale, fontColor, lineType
     )
-
     cv2.imshow("Frame", frame)
-    cv2.imshow("mask", mask)
+    # cv2.imshow("mask", mask)
     # cv2.imshow("res", res)
 
     # **************** boilerplate-code => same for all ************************#
